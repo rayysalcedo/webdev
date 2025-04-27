@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Classroom Feedback Survey</title>
+  <style>
+    /* ===== Animated Gradient "Motion" Background ===== */
+    /* Creates a smoothly shifting color gradient behind the page */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      /* define a multi-color gradient */
+      background: linear-gradient(-45deg, #800000, #ff7f7f, #ffffff, #ffe4e1);
+      background-size: 400% 400%;          /* make the gradient large for smooth motion */
+      animation: gradientBG 15s ease infinite;  /* animate it forever */
+    }
+    /* Keyframes to shift the background position over time */
+    @keyframes gradientBG {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* ===== Container Styling ===== */
+    /* A semi-transparent white box centers the content */
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background: rgba(255,255,255,0.9);  /* slight opacity so background peeks through */
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    /* ===== Header ===== */
+    header {
+      background: #800000;  /* maroon header bar */
+      padding: 15px;
+      text-align: center;
+      border-radius: 6px;
+    }
+    header h1 {
+      color: #fff;           /* white title text */
+      margin: 0;
+      font-size: 1.8rem;
+    }
+
+    /* ===== Section Titles ===== */
+    h2 {
+      color: #800000;       /* maroon subtitles */
+      margin: 20px 0 10px;
+      font-size: 1.4rem;
+    }
+
+    /* ===== Form Elements ===== */
+    /* Label default spacing and weight */
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: bold;
+    }
+    form {
+      margin-bottom: 30px;
+    }
+    /* Shared styles for inputs, selects, textareas */
+    input[type="text"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    /* Make textarea vertically resizable */
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    /* ===== Star Rating ===== */
+    .rating {
+      display: inline-flex;         /* lay stars out horizontally */
+      flex-direction: row-reverse;  /* keep 5★ on left */
+      font-size: 1.5rem;
+      margin: 10px 0;
+    }
+    .rating input {
+      display: none;                /* hide the radio button circles */
+    }
+    .rating label {
+      color: #ccc;                  /* gray when inactive */
+      cursor: pointer;
+      margin: 0 4px;
+    }
+    /* highlight hovered or selected stars */
+    .rating label:hover,
+    .rating label:hover ~ label,
+    .rating input:checked ~ label {
+      color: #fde16d;               /* gold color */
+    }
+
+    /* ===== Inline Checkbox ===== */
+    .checkbox {
+      display: flex;                /* place box + text side by side */
+      align-items: center;          /* vertical alignment */
+      margin: 10px 0;
+    }
+    .checkbox input {
+      margin-right: 6px;            /* small gap between box and label */
+    }
+    .checkbox label {
+      display: inline-block;        /* override block-level default */
+      margin: 0;
+      font-weight: normal;
+    }
+
+    /* ===== Submit Button ===== */
+    button {
+      background: #800000;          /* maroon button */
+      color: #fff;                  /* white text */
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    /* float effect on hover */
+    button:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    /* ===== Filters Above Table ===== */
+    .filters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .filters select {
+      padding: 6px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    /* ===== Results Table ===== */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background: #800000;   /* maroon header row */
+      color: #fff;
+    }
+    tr:nth-child(even) {
+      background: #fafafa;   /* zebra striping */
+    }
+
+    /* ===== Responsive Adjustments ===== */
+    @media (max-width: 600px) {
+      .filters {
+        flex-direction: column;  /* stack filters vertically */
+      }
+    }
+
+    /* ===== Footer ===== */
+    footer {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #555;
+      padding: 10px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Page Header -->
+    <header>
+      <h1>Classroom Feedback Survey</h1>
+    </header>
+
+    <!-- ==== Survey Form ==== -->
+    <form id="surveyForm">
+      <!-- Student Info Section -->
+      <h2>Student Info</h2>
+
+      <!-- Name Field -->
+      <label for="studentName">Name</label>
+      <input type="text" id="studentName" placeholder="Enter your name">
+
+      <!-- Grade & Section Field -->
+      <label for="gradeSection">Grade &amp; Section</label>
+      <select id="gradeSection">
+        <option>Grade 7-A</option>
+        <option>Grade 8-B</option>
+      </select>
+
+      <!-- Feedback Section -->
+      <h2>Feedback</h2>
+
+      <!-- Subject Field -->
+      <label for="subject">Subject</label>
+      <select id="subject">
+        <option>Math</option>
+        <option>Science</option>
+        <option>English</option>
+      </select>
+
+      <!-- Star Rating Field -->
+      <label>Teacher Rating</label>
+      <div class="rating">
+        <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
+        <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
+        <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
+        <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
+        <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
+      </div>
+
+      <!-- Favorite Lesson Field -->
+      <label for="favoriteLesson">Favorite Lesson</label>
+      <input type="text" id="favoriteLesson" placeholder="What did you enjoy most?">
+
+      <!-- Suggestions Field -->
+      <label for="suggestions">Suggestions for Improvement</label>
+      <textarea id="suggestions" placeholder="Your suggestions here"></textarea>
+
+      <!-- Anonymous Checkbox -->
+      <div class="checkbox">
+        <input type="checkbox" id="anonymous">
+        <label for="anonymous">Submit anonymously</label>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit">Submit Feedback</button>
+    </form>
+
+    <!-- ==== Results Section ==== -->
+    <h2>Submitted Feedback</h2>
+
+    <!-- Filters Above Table -->
+    <div class="filters">
+      <select id="filterSubject">
+        <option>All Subjects</option>
+        <option>Math</option>
+        <option>Science</option>
+        <option>English</option>
+      </select>
+      <select id="filterRating">
+        <option>All Ratings</option>
+        <option>5</option>
+        <option>4</option>
+        <option>3</option>
+        <option>2</option>
+        <option>1</option>
+      </select>
+    </div>
+
+    <!-- Table of Responses -->
+    <table id="resultsTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Grade &amp; Section</th>
+          <th>Subject</th>
+          <th>Rating</th>
+          <th>Favorite Lesson</th>
+          <th>Suggestions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- JavaScript will append rows here -->
+      </tbody>
+    </table>
+
+    <!-- Footer -->
+    <footer>
+      &copy; Made by DIT 2-2 Team 18 Web Development
+    </footer>
+  </div>
+
+  <script>
+    // ===== Grab references to form, table body, and filters =====
+    const form          = document.getElementById('surveyForm');
+    const tbody         = document.querySelector('#resultsTable tbody');
+    const filterSubject = document.getElementById('filterSubject');
+    const filterRating  = document.getElementById('filterRating');
+
+    // ===== Handle form submission =====
+    form.addEventListener('submit', e => {
+      e.preventDefault();  // prevent page reload
+
+      // 1) Read and normalize inputs
+      let name = document.getElementById('studentName').value.trim();
+      // if blank and anonymous checked, use "Anonymous"
+      if (!name && document.getElementById('anonymous').checked) {
+        name = 'Anonymous';
+      }
+      name = name || '';
+
+      const grade   = document.getElementById('gradeSection').value;
+      const subject = document.getElementById('subject').value;
+      const ratingRadio = document.querySelector('input[name="rating"]:checked');
+      const rating  = ratingRadio ? ratingRadio.value : '';
+      const fav     = document.getElementById('favoriteLesson').value.trim();
+      const sugg    = document.getElementById('suggestions').value.trim();
+
+      // 2) Build a new table row and insert the data
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${name || 'Anonymous'}</td>
+        <td>${grade}</td>
+        <td>${subject}</td>
+        <td>${rating} ★</td>
+        <td>${fav}</td>
+        <td>${sugg}</td>
+      `;
+      tbody.appendChild(tr);
+
+      // 3) Clear the form for the next entry
+      form.reset();
+
+      // 4) Reapply filters (so the new row obeys any active filter)
+      applyFilters();
+    });
+
+    // ===== Filter function: show/hide rows by subject and rating =====
+    function applyFilters() {
+      const subj = filterSubject.value;
+      const rat  = filterRating.value;
+
+      tbody.querySelectorAll('tr').forEach(row => {
+        const rowSubj = row.cells[2].textContent;
+        const rowRat  = row.cells[3].textContent.charAt(0);
+
+        const matchSubj = (subj === 'All Subjects' || subj === rowSubj);
+        const matchRat  = (rat  === 'All Ratings'  || rat  === rowRat);
+
+        row.style.display = (matchSubj && matchRat) ? '' : 'none';
+      });
+    }
+
+    // ===== Wire up filter dropdowns to re-filter on change =====
+    filterSubject.addEventListener('change', applyFilters);
+    filterRating.addEventListener('change', applyFilters);
+  </script>
+</body>
+</html>
